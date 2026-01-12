@@ -6,12 +6,26 @@ if (!fetch) {
   throw new Error("Global fetch is not available. Use Node 18+.");
 }
 
+/**
+ * UsersTools class provides MCP (Model Context Protocol) tools for interacting
+ * with JSONPlaceholder users API endpoints. This includes CRUD operations
+ * for users with proper input validation using Zod schemas.
+ */
 class UsersTools {
+  /**
+   * Constructor initializes all Zod schemas for input validation.
+   * Each schema defines the expected structure and types for tool arguments.
+   */
   constructor() {
+    // Schema for getting all users (no parameters needed)
     this.getUsersSchema = z.object({});
+
+    // Schema for getting a single user by ID
     this.getUserSchema = z.object({
       id: z.number().int().positive(),
     });
+
+    // Schema for creating a new user (name, username, email required, others optional)
     this.createUserSchema = z.object({
       name: z.string().min(1),
       username: z.string().min(1),
@@ -40,6 +54,8 @@ class UsersTools {
         })
         .optional(),
     });
+
+    // Schema for updating an existing user (all fields optional except id)
     this.updateUserSchema = z.object({
       id: z.number().int().positive(),
       name: z.string().min(1).optional(),
@@ -69,18 +85,26 @@ class UsersTools {
         })
         .optional(),
     });
+    // Schema for deleting a user by ID
     this.deleteUserSchema = z.object({
       id: z.number().int().positive(),
     });
   }
 
+  /**
+   * Registers all user-related tools with the MCP server.
+   * Each tool is registered with a name, description, input schema, and handler function.
+   * @param {Object} server - The MCP server instance to register tools with
+   */
   register(server) {
+    // Tool to get all users
     server.registerTool(
       "get_users",
       { description: "Get all users", inputSchema: this.getUsersSchema },
       this.getUsers.bind(this)
     );
 
+    // Tool to get a single user by ID
     server.registerTool(
       "get_user",
       {
@@ -90,12 +114,14 @@ class UsersTools {
       this.getUser.bind(this)
     );
 
+    // Tool to create a new user
     server.registerTool(
       "create_user",
       { description: "Create a new user", inputSchema: this.createUserSchema },
       this.createUser.bind(this)
     );
 
+    // Tool to update an existing user
     server.registerTool(
       "update_user",
       {
@@ -105,6 +131,7 @@ class UsersTools {
       this.updateUser.bind(this)
     );
 
+    // Tool to delete a user by ID
     server.registerTool(
       "delete_user",
       {
@@ -115,6 +142,11 @@ class UsersTools {
     );
   }
 
+  /**
+   * Retrieves all users from the JSONPlaceholder API.
+   * @param {Object} args - Arguments object (empty for this endpoint)
+   * @returns {Object} MCP response with user data
+   */
   async getUsers(args) {
     this.getUsersSchema.parse(args);
     const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -122,6 +154,11 @@ class UsersTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Retrieves a single user by ID from the JSONPlaceholder API.
+   * @param {Object} args - Arguments object containing the user id
+   * @returns {Object} MCP response with single user data
+   */
   async getUser(args) {
     const validated = this.getUserSchema.parse(args);
     const res = await fetch(
@@ -131,6 +168,12 @@ class UsersTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Creates a new user in the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so the user won't actually be persisted.
+   * @param {Object} args - Arguments object containing user data
+   * @returns {Object} MCP response with created user data
+   */
   async createUser(args) {
     const validated = this.createUserSchema.parse(args);
     const res = await fetch("https://jsonplaceholder.typicode.com/users", {
@@ -142,6 +185,12 @@ class UsersTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Updates an existing user in the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+   * @param {Object} args - Arguments object containing id and optional fields to update
+   * @returns {Object} MCP response with updated user data
+   */
   async updateUser(args) {
     const validated = this.updateUserSchema.parse(args);
     const { id, ...updateData } = validated;
@@ -157,6 +206,12 @@ class UsersTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Deletes a user from the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so the user won't actually be deleted.
+   * @param {Object} args - Arguments object containing the user id to delete
+   * @returns {Object} MCP response with deletion status
+   */
   async deleteUser(args) {
     const validated = this.deleteUserSchema.parse(args);
     const res = await fetch(

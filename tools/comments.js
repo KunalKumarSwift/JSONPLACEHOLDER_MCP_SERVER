@@ -6,16 +6,28 @@ if (!fetch) {
   throw new Error("Global fetch is not available. Use Node 18+.");
 }
 
+/**
+ * CommentsTools class provides MCP (Model Context Protocol) tools for interacting
+ * with JSONPlaceholder comments API endpoints. This includes CRUD operations
+ * for comments with proper input validation using Zod schemas.
+ */
 class CommentsTools {
+  /**
+   * Constructor initializes all Zod schemas for input validation.
+   * Each schema defines the expected structure and types for tool arguments.
+   */
   constructor() {
+    // Schema for getting all comments, optionally filtered by postId
     this.getCommentsSchema = z.object({
       postId: z.number().int().positive().optional(),
     });
 
+    // Schema for getting a single comment by ID
     this.getCommentSchema = z.object({
       id: z.number().int().positive(),
     });
 
+    // Schema for creating a new comment (requires postId, name, email, body)
     this.createCommentSchema = z.object({
       postId: z.number().int().positive(),
       name: z.string().min(1),
@@ -23,6 +35,7 @@ class CommentsTools {
       body: z.string().min(1),
     });
 
+    // Schema for updating an existing comment (all fields optional except id)
     this.updateCommentSchema = z.object({
       id: z.number().int().positive(),
       postId: z.number().int().positive().optional(),
@@ -31,12 +44,19 @@ class CommentsTools {
       body: z.string().min(1).optional(),
     });
 
+    // Schema for deleting a comment by ID
     this.deleteCommentSchema = z.object({
       id: z.number().int().positive(),
     });
   }
 
+  /**
+   * Registers all comment-related tools with the MCP server.
+   * Each tool is registered with a name, description, input schema, and handler function.
+   * @param {Object} server - The MCP server instance to register tools with
+   */
   register(server) {
+    // Tool to get all comments or filter by postId
     server.registerTool(
       "get_comments",
       {
@@ -46,6 +66,7 @@ class CommentsTools {
       this.getComments.bind(this)
     );
 
+    // Tool to get a single comment by ID
     server.registerTool(
       "get_comment",
       {
@@ -55,6 +76,7 @@ class CommentsTools {
       this.getComment.bind(this)
     );
 
+    // Tool to create a new comment
     server.registerTool(
       "create_comment",
       {
@@ -64,6 +86,7 @@ class CommentsTools {
       this.createComment.bind(this)
     );
 
+    // Tool to update an existing comment
     server.registerTool(
       "update_comment",
       {
@@ -73,6 +96,7 @@ class CommentsTools {
       this.updateComment.bind(this)
     );
 
+    // Tool to delete a comment by ID
     server.registerTool(
       "delete_comment",
       {
@@ -83,6 +107,12 @@ class CommentsTools {
     );
   }
 
+  /**
+   * Retrieves all comments from the JSONPlaceholder API.
+   * Optionally filters comments by postId if provided.
+   * @param {Object} args - Arguments object, optionally containing postId
+   * @returns {Object} MCP response with comment data
+   */
   async getComments(args) {
     const validated = this.getCommentsSchema.parse(args);
     const url = validated.postId
@@ -95,6 +125,11 @@ class CommentsTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Retrieves a single comment by its ID from the JSONPlaceholder API.
+   * @param {Object} args - Arguments object containing the comment id
+   * @returns {Object} MCP response with single comment data
+   */
   async getComment(args) {
     const validated = this.getCommentSchema.parse(args);
     const res = await fetch(
@@ -105,6 +140,12 @@ class CommentsTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Creates a new comment in the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so the comment won't actually be persisted.
+   * @param {Object} args - Arguments object containing postId, name, email, and body
+   * @returns {Object} MCP response with created comment data
+   */
   async createComment(args) {
     const validated = this.createCommentSchema.parse(args);
     const res = await fetch("https://jsonplaceholder.typicode.com/comments", {
@@ -117,6 +158,12 @@ class CommentsTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Updates an existing comment in the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+   * @param {Object} args - Arguments object containing id and optional fields to update
+   * @returns {Object} MCP response with updated comment data
+   */
   async updateComment(args) {
     const validated = this.updateCommentSchema.parse(args);
     const { id, ...updateData } = validated;
@@ -133,6 +180,12 @@ class CommentsTools {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 
+  /**
+   * Deletes a comment from the JSONPlaceholder API.
+   * Note: JSONPlaceholder is a mock API, so the comment won't actually be deleted.
+   * @param {Object} args - Arguments object containing the comment id to delete
+   * @returns {Object} MCP response with deletion status
+   */
   async deleteComment(args) {
     const validated = this.deleteCommentSchema.parse(args);
     const res = await fetch(
