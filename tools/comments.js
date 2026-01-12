@@ -17,17 +17,31 @@ class CommentsTools {
    * Each schema defines the expected structure and types for tool arguments.
    */
   constructor() {
-    // Schema for getting all comments, optionally filtered by postId
+    /**
+     * Schema for getting all comments, optionally filtered by postId
+     * Sample: {} or { "postId": 1 }
+     */
     this.getCommentsSchema = z.object({
       postId: z.number().int().positive().optional(),
     });
 
-    // Schema for getting a single comment by ID
+    /**
+     * Schema for getting a single comment by ID
+     * Sample: { "id": 1 }
+     */
     this.getCommentSchema = z.object({
       id: z.number().int().positive(),
     });
 
-    // Schema for creating a new comment (requires postId, name, email, body)
+    /**
+     * Schema for creating a new comment (requires postId, name, email, body)
+     * Sample: {
+     *   "postId": 1,
+     *   "name": "John Doe",
+     *   "email": "john@example.com",
+     *   "body": "This is a great post!"
+     * }
+     */
     this.createCommentSchema = z.object({
       postId: z.number().int().positive(),
       name: z.string().min(1),
@@ -35,7 +49,16 @@ class CommentsTools {
       body: z.string().min(1),
     });
 
-    // Schema for updating an existing comment (all fields optional except id)
+    /**
+     * Schema for updating an existing comment (all fields optional except id)
+     * Sample: {
+     *   "id": 1,
+     *   "postId": 2,
+     *   "name": "Updated Name",
+     *   "email": "updated@example.com",
+     *   "body": "Updated comment content"
+     * }
+     */
     this.updateCommentSchema = z.object({
       id: z.number().int().positive(),
       postId: z.number().int().positive().optional(),
@@ -44,7 +67,10 @@ class CommentsTools {
       body: z.string().min(1).optional(),
     });
 
-    // Schema for deleting a comment by ID
+    /**
+     * Schema for deleting a comment by ID
+     * Sample: { "id": 1 }
+     */
     this.deleteCommentSchema = z.object({
       id: z.number().int().positive(),
     });

@@ -17,17 +17,31 @@ class PhotosTools {
    * Each schema defines the expected structure and types for tool arguments.
    */
   constructor() {
-    // Schema for getting all photos, optionally filtered by albumId
+    /**
+     * Schema for getting all photos, optionally filtered by albumId
+     * Sample: {} or { "albumId": 1 }
+     */
     this.getPhotosSchema = z.object({
       albumId: z.number().int().positive().optional(),
     });
 
-    // Schema for getting a single photo by ID
+    /**
+     * Schema for getting a single photo by ID
+     * Sample: { "id": 1 }
+     */
     this.getPhotoSchema = z.object({
       id: z.number().int().positive(),
     });
 
-    // Schema for creating a new photo (requires albumId, title, url, thumbnailUrl)
+    /**
+     * Schema for creating a new photo (requires albumId, title, url, thumbnailUrl)
+     * Sample: {
+     *   "albumId": 1,
+     *   "title": "Beautiful Sunset",
+     *   "url": "https://example.com/photo.jpg",
+     *   "thumbnailUrl": "https://example.com/thumb.jpg"
+     * }
+     */
     this.createPhotoSchema = z.object({
       albumId: z.number().int().positive(),
       title: z.string().min(1),
@@ -35,7 +49,16 @@ class PhotosTools {
       thumbnailUrl: z.string().url(),
     });
 
-    // Schema for updating an existing photo (all fields optional except id)
+    /**
+     * Schema for updating an existing photo (all fields optional except id)
+     * Sample: {
+     *   "id": 1,
+     *   "albumId": 2,
+     *   "title": "Updated Photo Title",
+     *   "url": "https://example.com/new-photo.jpg",
+     *   "thumbnailUrl": "https://example.com/new-thumb.jpg"
+     * }
+     */
     this.updatePhotoSchema = z.object({
       id: z.number().int().positive(),
       albumId: z.number().int().positive().optional(),
@@ -44,6 +67,10 @@ class PhotosTools {
       thumbnailUrl: z.string().url().optional(),
     });
 
+    /**
+     * Schema for deleting a photo by ID
+     * Sample: { "id": 1 }
+     */
     this.deletePhotoSchema = z.object({
       id: z.number().int().positive(),
     });

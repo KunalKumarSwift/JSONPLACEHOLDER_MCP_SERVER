@@ -17,15 +17,30 @@ class UsersTools {
    * Each schema defines the expected structure and types for tool arguments.
    */
   constructor() {
-    // Schema for getting all users (no parameters needed)
+    /**
+     * Schema for getting all users (no parameters needed)
+     * Sample: {}
+     */
     this.getUsersSchema = z.object({});
 
-    // Schema for getting a single user by ID
+    /**
+     * Schema for getting a single user by ID
+     * Sample: { "id": 1 }
+     */
     this.getUserSchema = z.object({
       id: z.number().int().positive(),
     });
 
-    // Schema for creating a new user (name, username, email required, others optional)
+    /**
+     * Schema for creating a new user (name, username, email required, others optional)
+     * Sample: {
+     *   "name": "John Doe",
+     *   "username": "johndoe",
+     *   "email": "john@example.com",
+     *   "phone": "1-770-736-8031",
+     *   "website": "example.com"
+     * }
+     */
     this.createUserSchema = z.object({
       name: z.string().min(1),
       username: z.string().min(1),
@@ -55,7 +70,32 @@ class UsersTools {
         .optional(),
     });
 
-    // Schema for updating an existing user (all fields optional except id)
+    /**
+     * Schema for updating an existing user (all fields optional except id)
+     * Sample: {
+     *   "id": 1,
+     *   "name": "Updated Name",
+     *   "username": "updateduser",
+     *   "email": "updated@example.com",
+     *   "address": {
+     *     "street": "Updated Street",
+     *     "suite": "Apt. 123",
+     *     "city": "Updated City",
+     *     "zipcode": "12345",
+     *     "geo": {
+     *       "lat": "40.7128",
+     *       "lng": "-74.0060"
+     *     }
+     *   },
+     *   "phone": "555-1234",
+     *   "website": "updatedsite.com",
+     *   "company": {
+     *     "name": "Updated Company",
+     *     "catchPhrase": "Updated catch phrase",
+     *     "bs": "Updated business"
+     *   }
+     * }
+     */
     this.updateUserSchema = z.object({
       id: z.number().int().positive(),
       name: z.string().min(1).optional(),
@@ -85,7 +125,11 @@ class UsersTools {
         })
         .optional(),
     });
-    // Schema for deleting a user by ID
+
+    /**
+     * Schema for deleting a user by ID
+     * Sample: { "id": 1 }
+     */
     this.deleteUserSchema = z.object({
       id: z.number().int().positive(),
     });

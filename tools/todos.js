@@ -20,6 +20,7 @@ class TodosTools {
   constructor() {
     /**
      * Schema for getting todos - optionally filter by user ID
+     * Sample: {} or { "userId": 1 }
      */
     this.getTodosSchema = z.object({
       userId: z.number().int().positive().optional(),
@@ -27,6 +28,7 @@ class TodosTools {
 
     /**
      * Schema for getting a single todo by ID
+     * Sample: { "id": 1 }
      */
     this.getTodoSchema = z.object({
       id: z.number().int().positive(),
@@ -34,6 +36,11 @@ class TodosTools {
 
     /**
      * Schema for creating a new todo
+     * Sample: {
+     *   "title": "Buy groceries",
+     *   "completed": false,
+     *   "userId": 1
+     * }
      */
     this.createTodoSchema = z.object({
       title: z.string().min(1),
@@ -43,6 +50,12 @@ class TodosTools {
 
     /**
      * Schema for updating an existing todo
+     * Sample: {
+     *   "id": 1,
+     *   "title": "Updated task",
+     *   "completed": true,
+     *   "userId": 2
+     * }
      */
     this.updateTodoSchema = z.object({
       id: z.number().int().positive(),
@@ -53,6 +66,7 @@ class TodosTools {
 
     /**
      * Schema for deleting a todo by ID
+     * Sample: { "id": 1 }
      */
     this.deleteTodoSchema = z.object({
       id: z.number().int().positive(),

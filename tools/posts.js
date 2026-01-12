@@ -17,24 +17,44 @@ class PostsTools {
    * Each schema defines the expected structure and types for tool arguments.
    */
   constructor() {
-    // Schema for getting all posts, optionally filtered by userId
+    /**
+     * Schema for getting all posts, optionally filtered by userId
+     * Sample: {} or { "userId": 1 }
+     */
     this.getPostsSchema = z.object({
       userId: z.number().int().positive().optional(),
     });
 
-    // Schema for getting a single post by ID
+    /**
+     * Schema for getting a single post by ID
+     * Sample: { "id": 1 }
+     */
     this.getPostSchema = z.object({
       id: z.number().int().positive(),
     });
 
-    // Schema for creating a new post (requires title, body, and userId)
+    /**
+     * Schema for creating a new post (requires title, body, and userId)
+     * Sample: {
+     *   "title": "My Post Title",
+     *   "body": "This is the content of my post",
+     *   "userId": 1
+     * }
+     */
     this.createPostSchema = z.object({
       title: z.string().min(1),
       body: z.string().min(1),
       userId: z.number().int().positive(),
     });
 
-    // Schema for updating an existing post (all fields optional except id)
+    /**
+     * Schema for updating an existing post (all fields optional except id)
+     * Sample: {
+     *   "id": 1,
+     *   "title": "Updated Title",
+     *   "body": "Updated content"
+     * }
+     */
     this.updatePostSchema = z.object({
       id: z.number().int().positive(),
       title: z.string().min(1).optional(),
@@ -42,7 +62,10 @@ class PostsTools {
       userId: z.number().int().positive().optional(),
     });
 
-    // Schema for deleting a post by ID
+    /**
+     * Schema for deleting a post by ID
+     * Sample: { "id": 1 }
+     */
     this.deletePostSchema = z.object({
       id: z.number().int().positive(),
     });
