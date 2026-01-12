@@ -198,6 +198,67 @@ npm run test:users  # Only run user tests
 - `npm test` - Run all tests
 - `npm run test:*` - Run specific test suites
 
+### VS Code Development
+
+This project includes VS Code configurations for easy development and debugging:
+
+#### Launch Configurations
+
+The `.vscode/launch.json` file provides several run/debug configurations:
+
+- **Run MCP Server (Development)**: Runs the server from source code (`index.js`)
+- **Run MCP Server (Production)**: Runs the built server (`build/index.js`)
+- **Debug MCP Server**: Debug the server with breakpoints and inspection
+- **Run Tests**: Run the test suite with debugging capabilities
+
+#### Tasks
+
+The `.vscode/tasks.json` file provides build tasks:
+
+- **Build MCP Server**: Builds the project using `npm run build`
+- **Run Tests**: Runs all tests using `npm test`
+- **Install Dependencies**: Installs npm dependencies
+- **Clean Build**: Removes the build directory
+
+#### How to Use
+
+1. **Running the Server:**
+
+   - Open the Run and Debug panel (Ctrl+Shift+D / Cmd+Shift+D)
+   - Select "Run MCP Server (Development)" from the dropdown
+   - Click the green play button or press F5
+
+2. **Debugging:**
+
+   - Set breakpoints in your code
+   - Select "Debug MCP Server" configuration
+   - Run with F5 - the server will start and you can debug with breakpoints
+
+3. **Running Tests:**
+
+   - Select "Run Tests" from the launch configurations
+   - Or use Ctrl+Shift+P → "Tasks: Run Task" → "Run Tests"
+
+4. **Building:**
+   - Use Ctrl+Shift+P → "Tasks: Run Build Task" → "Build MCP Server"
+   - Or use the terminal: `npm run build`
+
+#### MCP Configuration
+
+The `.vscode/mcp.json` file configures the MCP server for VS Code's MCP extension:
+
+```json
+{
+  "servers": {
+    "jsonplaceholder-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["build/index.js"]
+    }
+  }
+}
+```
+
 ### MCP SDK
 
 This project uses the [Model Context Protocol SDK](https://github.com/modelcontextprotocol/typescript-sdk) for Node.js.

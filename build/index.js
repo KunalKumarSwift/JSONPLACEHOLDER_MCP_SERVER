@@ -16347,6 +16347,10 @@ var require_posts = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var PostsTools2 = class {
+      /**
+       * Constructor initializes all Zod schemas for input validation.
+       * Each schema defines the expected structure and types for tool arguments.
+       */
       constructor() {
         this.getPostsSchema = z.object({
           userId: z.number().int().positive().optional()
@@ -16369,6 +16373,11 @@ var require_posts = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all post-related tools with the MCP server.
+       * Each tool is registered with a name, description, input schema, and handler function.
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_posts",
@@ -16408,6 +16417,12 @@ var require_posts = __commonJS({
           this.deletePost.bind(this)
         );
       }
+      /**
+       * Retrieves all posts from the JSONPlaceholder API.
+       * Optionally filters posts by userId if provided.
+       * @param {Object} args - Arguments object, optionally containing userId
+       * @returns {Object} MCP response with post data
+       */
       async getPosts(args) {
         const validated = this.getPostsSchema.parse(args);
         const url = validated.userId ? `https://jsonplaceholder.typicode.com/posts?userId=${validated.userId}` : "https://jsonplaceholder.typicode.com/posts";
@@ -16415,6 +16430,11 @@ var require_posts = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single post by its ID from the JSONPlaceholder API.
+       * @param {Object} args - Arguments object containing the post id
+       * @returns {Object} MCP response with single post data
+       */
       async getPost(args) {
         const validated = this.getPostSchema.parse(args);
         const res = await fetch(
@@ -16423,6 +16443,12 @@ var require_posts = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new post in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the post won't actually be persisted.
+       * @param {Object} args - Arguments object containing title, body, and userId
+       * @returns {Object} MCP response with created post data
+       */
       async createPost(args) {
         const validated = this.createPostSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
@@ -16433,6 +16459,12 @@ var require_posts = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing post in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+       * @param {Object} args - Arguments object containing id and optional fields to update
+       * @returns {Object} MCP response with updated post data
+       */
       async updatePost(args) {
         const validated = this.updatePostSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -16447,6 +16479,12 @@ var require_posts = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes a post from the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the post won't actually be deleted.
+       * @param {Object} args - Arguments object containing the post id to delete
+       * @returns {Object} MCP response with deletion status
+       */
       async deletePost(args) {
         const validated = this.deletePostSchema.parse(args);
         const res = await fetch(
@@ -16478,6 +16516,10 @@ var require_comments = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var CommentsTools2 = class {
+      /**
+       * Constructor initializes all Zod schemas for input validation.
+       * Each schema defines the expected structure and types for tool arguments.
+       */
       constructor() {
         this.getCommentsSchema = z.object({
           postId: z.number().int().positive().optional()
@@ -16502,6 +16544,11 @@ var require_comments = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all comment-related tools with the MCP server.
+       * Each tool is registered with a name, description, input schema, and handler function.
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_comments",
@@ -16544,6 +16591,12 @@ var require_comments = __commonJS({
           this.deleteComment.bind(this)
         );
       }
+      /**
+       * Retrieves all comments from the JSONPlaceholder API.
+       * Optionally filters comments by postId if provided.
+       * @param {Object} args - Arguments object, optionally containing postId
+       * @returns {Object} MCP response with comment data
+       */
       async getComments(args) {
         const validated = this.getCommentsSchema.parse(args);
         const url = validated.postId ? `https://jsonplaceholder.typicode.com/comments?postId=${validated.postId}` : "https://jsonplaceholder.typicode.com/comments";
@@ -16551,6 +16604,11 @@ var require_comments = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single comment by its ID from the JSONPlaceholder API.
+       * @param {Object} args - Arguments object containing the comment id
+       * @returns {Object} MCP response with single comment data
+       */
       async getComment(args) {
         const validated = this.getCommentSchema.parse(args);
         const res = await fetch(
@@ -16559,6 +16617,12 @@ var require_comments = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new comment in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the comment won't actually be persisted.
+       * @param {Object} args - Arguments object containing postId, name, email, and body
+       * @returns {Object} MCP response with created comment data
+       */
       async createComment(args) {
         const validated = this.createCommentSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/comments", {
@@ -16569,6 +16633,12 @@ var require_comments = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing comment in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+       * @param {Object} args - Arguments object containing id and optional fields to update
+       * @returns {Object} MCP response with updated comment data
+       */
       async updateComment(args) {
         const validated = this.updateCommentSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -16583,6 +16653,12 @@ var require_comments = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes a comment from the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the comment won't actually be deleted.
+       * @param {Object} args - Arguments object containing the comment id to delete
+       * @returns {Object} MCP response with deletion status
+       */
       async deleteComment(args) {
         const validated = this.deleteCommentSchema.parse(args);
         const res = await fetch(
@@ -16612,6 +16688,10 @@ var require_albums = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var AlbumsTools2 = class {
+      /**
+       * Constructor initializes all Zod schemas for input validation.
+       * Each schema defines the expected structure and types for tool arguments.
+       */
       constructor() {
         this.getAlbumsSchema = z.object({
           userId: z.number().int().positive().optional()
@@ -16632,6 +16712,11 @@ var require_albums = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all album-related tools with the MCP server.
+       * Each tool is registered with a name, description, input schema, and handler function.
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_albums",
@@ -16674,6 +16759,12 @@ var require_albums = __commonJS({
           this.deleteAlbum.bind(this)
         );
       }
+      /**
+       * Retrieves all albums from the JSONPlaceholder API.
+       * Optionally filters albums by userId if provided.
+       * @param {Object} args - Arguments object, optionally containing userId
+       * @returns {Object} MCP response with album data
+       */
       async getAlbums(args) {
         const validated = this.getAlbumsSchema.parse(args);
         const url = validated.userId ? `https://jsonplaceholder.typicode.com/albums?userId=${validated.userId}` : "https://jsonplaceholder.typicode.com/albums";
@@ -16681,6 +16772,11 @@ var require_albums = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single album by its ID from the JSONPlaceholder API.
+       * @param {Object} args - Arguments object containing the album id
+       * @returns {Object} MCP response with single album data
+       */
       async getAlbum(args) {
         const validated = this.getAlbumSchema.parse(args);
         const res = await fetch(
@@ -16689,6 +16785,12 @@ var require_albums = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new album in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the album won't actually be persisted.
+       * @param {Object} args - Arguments object containing title and userId
+       * @returns {Object} MCP response with created album data
+       */
       async createAlbum(args) {
         const validated = this.createAlbumSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/albums", {
@@ -16699,6 +16801,12 @@ var require_albums = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing album in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+       * @param {Object} args - Arguments object containing id and optional fields to update
+       * @returns {Object} MCP response with updated album data
+       */
       async updateAlbum(args) {
         const validated = this.updateAlbumSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -16713,6 +16821,12 @@ var require_albums = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes an album from the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the album won't actually be deleted.
+       * @param {Object} args - Arguments object containing the album id to delete
+       * @returns {Object} MCP response with deletion status
+       */
       async deleteAlbum(args) {
         const validated = this.deleteAlbumSchema.parse(args);
         const res = await fetch(
@@ -16742,6 +16856,10 @@ var require_photos = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var PhotosTools2 = class {
+      /**
+       * Constructor initializes all Zod schemas for input validation.
+       * Each schema defines the expected structure and types for tool arguments.
+       */
       constructor() {
         this.getPhotosSchema = z.object({
           albumId: z.number().int().positive().optional()
@@ -16766,6 +16884,13 @@ var require_photos = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all photo-related tools with the MCP server.
+       * This method sets up the tool definitions and binds their handlers.
+       * Each tool corresponds to a CRUD operation on photos from the JSONPlaceholder API.
+       *
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_photos",
@@ -16808,6 +16933,15 @@ var require_photos = __commonJS({
           this.deletePhoto.bind(this)
         );
       }
+      /**
+       * Retrieves all photos or filters photos by album ID.
+       * Makes a GET request to the JSONPlaceholder photos endpoint.
+       * Note: JSONPlaceholder is a mock API, so this returns fake data.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} [args.albumId] - Optional album ID to filter photos
+       * @returns {Object} MCP response with photos data as JSON string
+       */
       async getPhotos(args) {
         const validated = this.getPhotosSchema.parse(args);
         const url = validated.albumId ? `https://jsonplaceholder.typicode.com/photos?albumId=${validated.albumId}` : "https://jsonplaceholder.typicode.com/photos";
@@ -16815,6 +16949,15 @@ var require_photos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single photo by its ID.
+       * Makes a GET request to the JSONPlaceholder photos endpoint with the specific ID.
+       * Note: JSONPlaceholder is a mock API, so this returns fake data.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The photo ID to retrieve
+       * @returns {Object} MCP response with photo data as JSON string
+       */
       async getPhoto(args) {
         const validated = this.getPhotoSchema.parse(args);
         const res = await fetch(
@@ -16823,6 +16966,18 @@ var require_photos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new photo.
+       * Makes a POST request to the JSONPlaceholder photos endpoint.
+       * Note: JSONPlaceholder is a mock API, so the photo won't actually be created on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.albumId - The album ID this photo belongs to
+       * @param {string} args.title - The title of the photo
+       * @param {string} args.url - The URL of the full-size photo
+       * @param {string} args.thumbnailUrl - The URL of the thumbnail photo
+       * @returns {Object} MCP response with created photo data as JSON string
+       */
       async createPhoto(args) {
         const validated = this.createPhotoSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/photos", {
@@ -16833,6 +16988,19 @@ var require_photos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing photo.
+       * Makes a PUT request to the JSONPlaceholder photos endpoint with the photo ID.
+       * Note: JSONPlaceholder is a mock API, so the photo won't actually be updated on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The photo ID to update
+       * @param {number} [args.albumId] - Optional new album ID
+       * @param {string} [args.title] - Optional new title
+       * @param {string} [args.url] - Optional new URL
+       * @param {string} [args.thumbnailUrl] - Optional new thumbnail URL
+       * @returns {Object} MCP response with updated photo data as JSON string
+       */
       async updatePhoto(args) {
         const validated = this.updatePhotoSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -16847,6 +17015,15 @@ var require_photos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes a photo by ID.
+       * Makes a DELETE request to the JSONPlaceholder photos endpoint.
+       * Note: JSONPlaceholder is a mock API, so the photo won't actually be deleted on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The photo ID to delete
+       * @returns {Object} MCP response with success/failure message
+       */
       async deletePhoto(args) {
         const validated = this.deletePhotoSchema.parse(args);
         const res = await fetch(
@@ -16878,6 +17055,10 @@ var require_todos = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var TodosTools2 = class {
+      /**
+       * Initializes the TodosTools class with Zod schemas for input validation.
+       * Sets up schemas for all CRUD operations on todos.
+       */
       constructor() {
         this.getTodosSchema = z.object({
           userId: z.number().int().positive().optional()
@@ -16900,6 +17081,13 @@ var require_todos = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all todo-related tools with the MCP server.
+       * This method sets up the tool definitions and binds their handlers.
+       * Each tool corresponds to a CRUD operation on todos from the JSONPlaceholder API.
+       *
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_todos",
@@ -16939,6 +17127,15 @@ var require_todos = __commonJS({
           this.deleteTodo.bind(this)
         );
       }
+      /**
+       * Retrieves all todos or filters todos by user ID.
+       * Makes a GET request to the JSONPlaceholder todos endpoint.
+       * Note: JSONPlaceholder is a mock API, so this returns fake data.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} [args.userId] - Optional user ID to filter todos
+       * @returns {Object} MCP response with todos data as JSON string
+       */
       async getTodos(args) {
         const validated = this.getTodosSchema.parse(args);
         const url = validated.userId ? `https://jsonplaceholder.typicode.com/todos?userId=${validated.userId}` : "https://jsonplaceholder.typicode.com/todos";
@@ -16946,6 +17143,15 @@ var require_todos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single todo by its ID.
+       * Makes a GET request to the JSONPlaceholder todos endpoint with the specific ID.
+       * Note: JSONPlaceholder is a mock API, so this returns fake data.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The todo ID to retrieve
+       * @returns {Object} MCP response with todo data as JSON string
+       */
       async getTodo(args) {
         const validated = this.getTodoSchema.parse(args);
         const res = await fetch(
@@ -16954,6 +17160,17 @@ var require_todos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new todo.
+       * Makes a POST request to the JSONPlaceholder todos endpoint.
+       * Note: JSONPlaceholder is a mock API, so the todo won't actually be created on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {string} args.title - The title of the todo
+       * @param {boolean} args.completed - Whether the todo is completed
+       * @param {number} args.userId - The user ID this todo belongs to
+       * @returns {Object} MCP response with created todo data as JSON string
+       */
       async createTodo(args) {
         const validated = this.createTodoSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/todos", {
@@ -16964,6 +17181,18 @@ var require_todos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing todo.
+       * Makes a PUT request to the JSONPlaceholder todos endpoint with the todo ID.
+       * Note: JSONPlaceholder is a mock API, so the todo won't actually be updated on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The todo ID to update
+       * @param {string} [args.title] - Optional new title
+       * @param {boolean} [args.completed] - Optional new completion status
+       * @param {number} [args.userId] - Optional new user ID
+       * @returns {Object} MCP response with updated todo data as JSON string
+       */
       async updateTodo(args) {
         const validated = this.updateTodoSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -16978,6 +17207,15 @@ var require_todos = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes a todo by ID.
+       * Makes a DELETE request to the JSONPlaceholder todos endpoint.
+       * Note: JSONPlaceholder is a mock API, so the todo won't actually be deleted on the server.
+       *
+       * @param {Object} args - The input arguments
+       * @param {number} args.id - The todo ID to delete
+       * @returns {Object} MCP response with success/failure message
+       */
       async deleteTodo(args) {
         const validated = this.deleteTodoSchema.parse(args);
         const res = await fetch(
@@ -17009,6 +17247,10 @@ var require_users = __commonJS({
       throw new Error("Global fetch is not available. Use Node 18+.");
     }
     var UsersTools2 = class {
+      /**
+       * Constructor initializes all Zod schemas for input validation.
+       * Each schema defines the expected structure and types for tool arguments.
+       */
       constructor() {
         this.getUsersSchema = z.object({});
         this.getUserSchema = z.object({
@@ -17063,6 +17305,11 @@ var require_users = __commonJS({
           id: z.number().int().positive()
         });
       }
+      /**
+       * Registers all user-related tools with the MCP server.
+       * Each tool is registered with a name, description, input schema, and handler function.
+       * @param {Object} server - The MCP server instance to register tools with
+       */
       register(server2) {
         server2.registerTool(
           "get_users",
@@ -17099,12 +17346,22 @@ var require_users = __commonJS({
           this.deleteUser.bind(this)
         );
       }
+      /**
+       * Retrieves all users from the JSONPlaceholder API.
+       * @param {Object} args - Arguments object (empty for this endpoint)
+       * @returns {Object} MCP response with user data
+       */
       async getUsers(args) {
         this.getUsersSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/users");
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Retrieves a single user by ID from the JSONPlaceholder API.
+       * @param {Object} args - Arguments object containing the user id
+       * @returns {Object} MCP response with single user data
+       */
       async getUser(args) {
         const validated = this.getUserSchema.parse(args);
         const res = await fetch(
@@ -17113,6 +17370,12 @@ var require_users = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Creates a new user in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the user won't actually be persisted.
+       * @param {Object} args - Arguments object containing user data
+       * @returns {Object} MCP response with created user data
+       */
       async createUser(args) {
         const validated = this.createUserSchema.parse(args);
         const res = await fetch("https://jsonplaceholder.typicode.com/users", {
@@ -17123,6 +17386,12 @@ var require_users = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Updates an existing user in the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so changes won't actually be persisted.
+       * @param {Object} args - Arguments object containing id and optional fields to update
+       * @returns {Object} MCP response with updated user data
+       */
       async updateUser(args) {
         const validated = this.updateUserSchema.parse(args);
         const { id, ...updateData } = validated;
@@ -17137,6 +17406,12 @@ var require_users = __commonJS({
         const data = await res.json();
         return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
       }
+      /**
+       * Deletes a user from the JSONPlaceholder API.
+       * Note: JSONPlaceholder is a mock API, so the user won't actually be deleted.
+       * @param {Object} args - Arguments object containing the user id to delete
+       * @returns {Object} MCP response with deletion status
+       */
       async deleteUser(args) {
         const validated = this.deleteUserSchema.parse(args);
         const res = await fetch(
