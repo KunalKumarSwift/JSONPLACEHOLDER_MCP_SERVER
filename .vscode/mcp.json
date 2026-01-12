@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "jsonplaceholder-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["build/index.js"]
+    }
+  }
+}
