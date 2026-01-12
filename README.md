@@ -15,18 +15,64 @@ The server provides tools for all JSONPlaceholder endpoints:
 
 ## Installation
 
-1. Clone this repository
-2. Run `npm install`
-3. Run `npm start` to start the server
+1. Clone this repository:
+
+   ```bash
+   git clone <repository-url>
+   cd jsonplaceholder-mcp-server
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Build the server:
+
+   ```bash
+   npm run build
+   ```
+
+   This bundles the server with `esbuild` into the `build/` folder.
+
+4. Start the server:
+
+   ```bash
+   npm start
+   ```
+
+   You should see:
+
+   ```
+   JSONPlaceholder MCP server running on stdio
+   ```
 
 ## Usage
 
-This server uses stdio transport and can be connected to MCP clients like Claude Desktop.
+- The server uses **stdio transport**, which means it can communicate with any MCP client that supports stdio.
+- Common MCP clients include:
 
-The `.vscode/mcp.json` file is configured for debugging in VS Code.
+  - **VS Code MCP extension** (for debugging and testing tools)
+  - **Claude Desktop**
+
+### Connecting in an MCP Client
+
+1. Open your MCP client (VS Code, Claude, etc.)
+2. Configure it to use a custom MCP server with stdio transport.
+3. Point the client to the server you just started (`npm start`).
+
+All tools (posts, comments, albums, photos, todos, users) will now be available in the client.
 
 ## API Reference
 
-All tools follow RESTful conventions and interact with https://jsonplaceholder.typicode.com/
+- All tools follow REST-like conventions and interact with the [JSONPlaceholder API](https://jsonplaceholder.typicode.com/).
+- **Note:** JSONPlaceholder is a fake API; create/update/delete operations return mock responses but do **not** persist data.
 
-Note: JSONPlaceholder is a fake API, so create/update/delete operations return mock responses but don't persist data.
+## Issues Fixed
+
+1. **Removed nested code fence delimiters** - The original had `````markdown` at the start which created an incorrect nesting structure
+2. **Properly closed the first bash code block** - Added the missing closing backticks after the clone/cd commands
+3. **Removed trailing incomplete code fence** - Removed the dangling triple backticks at the very end
+
+The markdown should now render correctly with all code blocks properly formatt
