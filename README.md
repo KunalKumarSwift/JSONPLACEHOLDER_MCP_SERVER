@@ -64,15 +64,140 @@ The server provides tools for all JSONPlaceholder endpoints:
 
 All tools (posts, comments, albums, photos, todos, users) will now be available in the client.
 
+## Testing
+
+The project includes a comprehensive test suite to verify all MCP tools are working correctly. Tests use JSON RPC communication to interact with the server.
+
+### Running Tests
+
+#### Run All Tests
+
+```bash
+npm test
+```
+
+#### Run Individual Test Suites
+
+```bash
+# Test specific tool categories
+npm run test:users      # Test user-related tools
+npm run test:posts      # Test post-related tools
+npm run test:comments   # Test comment-related tools
+npm run test:albums     # Test album-related tools
+npm run test:photos     # Test photo-related tools
+npm run test:todos      # Test todo-related tools
+```
+
+#### Run Tests Directly
+
+```bash
+# Run individual test files
+node tests/users.test.js
+node tests/posts.test.js
+node tests/comments.test.js
+node tests/albums.test.js
+node tests/photos.test.js
+node tests/todos.test.js
+
+# Run the main test runner
+node tests/tests.js
+```
+
+### Test Structure
+
+The test suite is organized into separate files for each tool category:
+
+```
+tests/
+├── testHelper.js          # Shared MCP testing utilities
+├── tests.js              # Main test runner (runs all tests)
+├── users.test.js         # Users tool tests (5 tests)
+├── posts.test.js         # Posts tool tests (6 tests)
+├── comments.test.js      # Comments tool tests (6 tests)
+├── albums.test.js        # Albums tool tests (6 tests)
+├── photos.test.js        # Photos tool tests (6 tests)
+└── todos.test.js         # Todos tool tests (6 tests)
+```
+
+### Test Coverage
+
+Each tool category includes tests for:
+
+- **GET all items** (e.g., `get_users`, `get_posts`)
+- **GET filtered items** (e.g., `get_posts?userId=1`, `get_comments?postId=1`)
+- **GET single item** (e.g., `get_user`, `get_post`)
+- **CREATE new item** (e.g., `create_user`, `create_post`)
+- **UPDATE existing item** (e.g., `update_user`, `update_post`)
+- **DELETE item** (e.g., `delete_user`, `delete_post`)
+
+**Total: 35 individual tests across 6 test suites**
+
+### Test Output
+
+When tests pass, you'll see:
+
+```
+==================================================
+Running Users Tests
+==================================================
+
+Starting Users Tests...
+JSONPlaceholder MCP server running on stdio
+Testing get_users with args: {}
+✓ get_users succeeded: [...]
+
+Users Tests Results: 5 passed, 0 failed
+✅ Users tests: PASSED
+```
+
+### Debugging Tests
+
+If tests fail, the output will show:
+
+- Which specific test failed
+- Error messages from the MCP server
+- Individual test results for each suite
+
+You can run individual test suites to isolate issues:
+
+```bash
+npm run test:users  # Only run user tests
+```
+
 ## API Reference
 
 - All tools follow REST-like conventions and interact with the [JSONPlaceholder API](https://jsonplaceholder.typicode.com/).
 - **Note:** JSONPlaceholder is a fake API; create/update/delete operations return mock responses but do **not** persist data.
 
-## Issues Fixed
+## Development
 
-1. **Removed nested code fence delimiters** - The original had `````markdown` at the start which created an incorrect nesting structure
-2. **Properly closed the first bash code block** - Added the missing closing backticks after the clone/cd commands
-3. **Removed trailing incomplete code fence** - Removed the dangling triple backticks at the very end
+### Project Structure
 
-The markdown should now render correctly with all code blocks properly formatt
+```
+├── index.js              # Main server entry point
+├── build/index.js        # Bundled server (generated)
+├── tools/                # Individual tool implementations
+│   ├── users.js
+│   ├── posts.js
+│   ├── comments.js
+│   ├── albums.js
+│   ├── photos.js
+│   └── todos.js
+├── tests/                # Test suite
+│   ├── testHelper.js     # Shared testing utilities
+│   ├── tests.js         # Main test runner
+│   └── *.test.js        # Individual test files
+├── package.json
+└── README.md
+```
+
+### Available Scripts
+
+- `npm run build` - Bundle the server with esbuild
+- `npm start` - Start the MCP server
+- `npm test` - Run all tests
+- `npm run test:*` - Run specific test suites
+
+### MCP SDK
+
+This project uses the [Model Context Protocol SDK](https://github.com/modelcontextprotocol/typescript-sdk) for Node.js.

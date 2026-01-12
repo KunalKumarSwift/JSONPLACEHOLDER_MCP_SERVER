@@ -5,7 +5,14 @@
   "main": "build/index.js",
   "scripts": {
     "build": "esbuild index.js --bundle --outfile=build/index.js --platform=node --external:@modelcontextprotocol/sdk",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "test": "node tests/tests.js",
+    "test:users": "node tests/users.test.js",
+    "test:posts": "node tests/posts.test.js",
+    "test:comments": "node tests/comments.test.js",
+    "test:albums": "node tests/albums.test.js",
+    "test:photos": "node tests/photos.test.js",
+    "test:todos": "node tests/todos.test.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.2",

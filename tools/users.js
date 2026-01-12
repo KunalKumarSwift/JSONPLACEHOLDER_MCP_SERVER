@@ -40,8 +40,34 @@ class UsersTools {
         })
         .optional(),
     });
-    this.updateUserSchema = this.createUserSchema.extend({
+    this.updateUserSchema = z.object({
       id: z.number().int().positive(),
+      name: z.string().min(1).optional(),
+      username: z.string().min(1).optional(),
+      email: z.string().email().optional(),
+      address: z
+        .object({
+          street: z.string().optional(),
+          suite: z.string().optional(),
+          city: z.string().optional(),
+          zipcode: z.string().optional(),
+          geo: z
+            .object({
+              lat: z.string().optional(),
+              lng: z.string().optional(),
+            })
+            .optional(),
+        })
+        .optional(),
+      phone: z.string().optional(),
+      website: z.string().optional(),
+      company: z
+        .object({
+          name: z.string().optional(),
+          catchPhrase: z.string().optional(),
+          bs: z.string().optional(),
+        })
+        .optional(),
     });
     this.deleteUserSchema = z.object({
       id: z.number().int().positive(),
